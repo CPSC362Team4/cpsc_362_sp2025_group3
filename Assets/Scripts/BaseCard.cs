@@ -2,9 +2,9 @@ using UnityEngine;
 
 public abstract class BaseCard : ScriptableObject //Scriptable Objects allow us to mass produce these
 {
-    [TextArea(15, 20)]
-
+    
     public bool CanMoveSpawn; //whether or not the card allows you to move a piece from spawn
+    [TextArea(15, 20)]
     public string cardDescription; // in sorry when you draw a card it displays a description of what it does so thats what this is
     public Sprite cardImage;
 

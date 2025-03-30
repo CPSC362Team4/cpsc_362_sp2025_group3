@@ -7,7 +7,7 @@ public class Pawn : MonoBehaviour
     public PieceState state;
 
     public BaseTile currentTile;
-    
+    public bool selectable = false;
    
     void Update()
     {
@@ -21,6 +21,15 @@ public class Pawn : MonoBehaviour
         {
             transform.Translate(direction * speed * Time.deltaTime, Space.World);
         }*/
+
+    }
+    private void OnMouseDown()
+    {
+
+       if(!selectable) { return; }
+
+       
+        TurnManager.Singleton.SelectedPiece(this);
 
     }
 }

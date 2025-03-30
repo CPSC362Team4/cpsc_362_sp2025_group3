@@ -7,4 +7,8 @@ public class Player
 
     public PieceColor color;
 
+    public Player(PieceColor color)
+    {
+        this.color = color;
+    }
 }
