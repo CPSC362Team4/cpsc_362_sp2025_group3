@@ -1,22 +1,14 @@
 using UnityEngine;
 
-public class Card
+
+[System.Serializable]
+[CreateAssetMenu(fileName = "Card", menuName = "CardSystem/BasicCard")]
+public class Card : BaseCard
 {
     public int value;
     
-    public Card(int value)
-    {
-        this.value = value;
-    }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
+    public override void CardEffect(Pawn pieceToEffect)
     {
         
     }
