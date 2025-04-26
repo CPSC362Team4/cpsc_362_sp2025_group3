@@ -45,4 +45,9 @@ public abstract class BaseTile : MonoBehaviour
         piece.gameObject.transform.position = gameObject.transform.position;
         return true;
     } 
+
+    public virtual void LandedOnEffect(Pawn piece)
+    {
+       
+    }
 }
