@@ -11,7 +11,7 @@ public class Card : BaseCard
     public override void CardEffect(Pawn pieceToEffect)
     {
         BaseTile startTile = pieceToEffect.currentTile;
-        BaseTile finalTile ;
+        BaseTile finalTile = startTile;
         for (int i = 0; i < value; i++) 
         {
             Debug.Log(" i tried to move");
@@ -19,5 +19,6 @@ public class Card : BaseCard
             finalTile.ApplyEffect(pieceToEffect);
             
         }
+        finalTile.LandedOnEffect(pieceToEffect);
     }
 }
