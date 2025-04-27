@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System.Linq;
 
 public class TurnManager : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class TurnManager : MonoBehaviour
     public static TurnManager Singleton; //singleton pattern bc i really can't/don't want to think of way for other things to perform their actions
 
     private List<PieceColor> colors = new List<PieceColor>() { PieceColor.Yellow, PieceColor.Green, PieceColor.Red, PieceColor.Blue};
+
+    public List<Pawn> currentlySelectedPawns = new List<Pawn>(); //this just makes the most sense since sometimes more than one pawn would be required
 
     public void Start()
     {
@@ -91,30 +94,52 @@ public class TurnManager : MonoBehaviour
     {
         while (cardDisplay.gameObject.activeSelf)
         {
-            
+
             yield return null;
         }
 
-        selectablePawns(new List<Player>() { players[currentPlayer] });
+        selectablePawns(currentCard.neededPawns[0]);
     }
 
-    private void selectablePawns(List<Player> makeSelectable)
+    public void selectablePawns(PawnInfo makeSelectable)
     {
-        Debug.Log("Im selectable1");
-        foreach (var player in makeSelectable)
+
+        if (makeSelectable.myPawns)//im gonna be so fr this gave me the big pain but this is the easiest way i can think of to allow specific selection of pawns
+        {       
+                foreach (var piece in getCurrentPlayer().pieces)
+                {
+
+                    if (makeSelectable.state.Contains(piece.state))
+                    {
+                        piece.selectable = true;
+                    }
+
+                }
+
+            return;         
+        }
+
+        
+        foreach (var player in players)
         {
-            Debug.Log("Im selectable2");
+            
+            if(player == getCurrentPlayer()) { return; }
+
             foreach (var piece in player.pieces)
             {
-                Debug.Log("Im selectable3");
-                piece.selectable = true;
+
+                if (makeSelectable.state.Contains(piece.state))
+                {
+                    piece.selectable = true;
+                }
             }
         }
 
     }
-    private void deselectPawns(List<Player> makeDeselectable)
+    private void deselectPawns()
     {
-        foreach (var player in makeDeselectable)
+        //for sure a way to optimize this instead of a 2d loop but not the main concern rn
+        foreach (var player in players)
         {
             foreach (var piece in player.pieces)
             {
@@ -124,9 +149,18 @@ public class TurnManager : MonoBehaviour
     }
     public void SelectedPiece(Pawn selectedPawn)
     {
-
-        currentCard.CardEffect(selectedPawn);
-        deselectPawns(new List<Player>() { players[currentPlayer] });
+        currentlySelectedPawns.Add(selectedPawn);
+        deselectPawns();
+        if (currentlySelectedPawns.Count >= currentCard.neededPawns.Length)
+        {
+            currentCard.CardEffect(currentlySelectedPawns);
+            currentlySelectedPawns.Clear();
+        }
+        else
+        {
+            selectablePawns(currentCard.neededPawns[currentlySelectedPawns.Count]);
+        }
+        
 
 
     }
