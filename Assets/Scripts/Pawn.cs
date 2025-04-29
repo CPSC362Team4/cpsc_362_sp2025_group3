@@ -8,7 +8,12 @@ public class Pawn : MonoBehaviour
 
     public BaseTile currentTile;
     public bool selectable = false;
-   
+
+
+    private void Awake()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = TurnManager.Singleton.actualColors[TurnManager.Singleton.colors.IndexOf(color)];
+    }
     void Update()
     {
         //This was movement code for the demonstration but we're not gonna need this anymore

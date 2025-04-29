@@ -10,9 +10,10 @@ public class TurnManager : MonoBehaviour
 
 
     public List<BaseTile> startTiles = new List<BaseTile>();
+
     public Dictionary<PieceColor, BaseTile> getStartTile = new Dictionary<PieceColor, BaseTile>();
 
-
+    
 
     public int piecesPerPlayer; //not necessary but i thought might be cool
     public GameObject pawnPrefab;
@@ -27,7 +28,8 @@ public class TurnManager : MonoBehaviour
 
     public static TurnManager Singleton; //singleton pattern bc i really can't/don't want to think of way for other things to perform their actions
 
-    private List<PieceColor> colors = new List<PieceColor>() { PieceColor.Yellow, PieceColor.Green, PieceColor.Red, PieceColor.Blue};
+    public List<PieceColor> colors = new List<PieceColor>() { PieceColor.Yellow, PieceColor.Green, PieceColor.Red, PieceColor.Blue};
+    public List<Color> actualColors = new List<Color>();
 
     public List<Pawn> currentlySelectedPawns = new List<Pawn>(); //this just makes the most sense since sometimes more than one pawn would be required
 
@@ -98,32 +100,37 @@ public class TurnManager : MonoBehaviour
             yield return null;
         }
 
-        selectablePawns(currentCard.neededPawns[0]);
+        if (!selectablePawns(currentCard.neededPawns[0]))
+        {
+            NextTurn();
+        }
     }
 
-    public void selectablePawns(PawnInfo makeSelectable)
+    public bool selectablePawns(PawnInfo makeSelectable)
     {
-
+        bool something = false;
         if (makeSelectable.myPawns)//im gonna be so fr this gave me the big pain but this is the easiest way i can think of to allow specific selection of pawns
         {       
-                foreach (var piece in getCurrentPlayer().pieces)
+            foreach (var piece in getCurrentPlayer().pieces)
+            {
+
+                if (makeSelectable.state.Contains(piece.state))
                 {
 
-                    if (makeSelectable.state.Contains(piece.state))
-                    {
-                        piece.selectable = true;
-                    }
-
+                    piece.selectable = true;
+                    something = true;
                 }
 
-            return;         
+            }
+
+            return something;         
         }
 
         
         foreach (var player in players)
         {
             
-            if(player == getCurrentPlayer()) { return; }
+            if(player == getCurrentPlayer()) { continue; }
 
             foreach (var piece in player.pieces)
             {
@@ -131,10 +138,11 @@ public class TurnManager : MonoBehaviour
                 if (makeSelectable.state.Contains(piece.state))
                 {
                     piece.selectable = true;
+                    something = true;
                 }
             }
         }
-
+        return something;
     }
     private void deselectPawns()
     {
@@ -153,7 +161,11 @@ public class TurnManager : MonoBehaviour
         deselectPawns();
         if (currentlySelectedPawns.Count >= currentCard.neededPawns.Length)
         {
-            currentCard.CardEffect(currentlySelectedPawns);
+            if(currentCard.CardEffect(currentlySelectedPawns))
+            {
+                NextTurn();
+            }
+            //probably go next turn if successful (?)
             currentlySelectedPawns.Clear();
         }
         else
@@ -161,8 +173,6 @@ public class TurnManager : MonoBehaviour
             selectablePawns(currentCard.neededPawns[currentlySelectedPawns.Count]);
         }
         
-
-
     }
     public Player getCurrentPlayer()
     {

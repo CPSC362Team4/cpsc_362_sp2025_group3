@@ -10,7 +10,7 @@ public abstract class BaseCard : ScriptableObject //Scriptable Objects allow us 
     public Sprite cardImage;
     public PawnInfo[] neededPawns;
 
-    public abstract void CardEffect(List<Pawn> pieceToEffect); //Some cards move you forward while others let you split/swap so thats what this is
+    public abstract bool CardEffect(List<Pawn> pieceToEffect); //Some cards move you forward while others let you split/swap so thats what this is
 
     
 }

@@ -9,7 +9,7 @@ public class Card : BaseCard
     public int value;
     
 
-    public override void CardEffect(List<Pawn> pieceToEffect)
+    public override bool CardEffect(List<Pawn> pieceToEffect)
     {
         BaseTile startTile = pieceToEffect[0].currentTile;
         BaseTile finalTile = startTile;
@@ -17,9 +17,18 @@ public class Card : BaseCard
         {
             Debug.Log(" i tried to move");
             finalTile = pieceToEffect[0].currentTile.nextTile;
-            finalTile.ApplyEffect(pieceToEffect[0]);
+            
+            if (!finalTile.ApplyEffect(pieceToEffect[0])) //basically means move was illegal
+            {
+
+                startTile.ApplyEffect(pieceToEffect[0]);
+                return false;
+            }
+            
             
         }
+        
         finalTile.LandedOnEffect(pieceToEffect[0]);
+        return true;
     }
 }
