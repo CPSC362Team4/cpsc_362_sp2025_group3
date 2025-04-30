@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74a18fed8009fc744bf35f05e4a4d788, type: 3}
-  m_Name: 3 Card
+  m_Name: 2 Card'
   m_EditorClassIdentifier: 
-  CanMoveSpawn: 1
+  CanMoveSpawn: 0
   GoAgain: 0
-  cardDescription: Move Forward 3 Spaces
-  cardImage: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  neededPawns:
-  - myPawns: 1
-    state: 00000000
-  value: 3
+  cardDescription: 
+  cardImage: {fileID: 0}
+  neededPawns: []
+  value: 0

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System.Linq;
+using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
@@ -32,7 +33,9 @@ public class TurnManager : MonoBehaviour
     public List<Color> actualColors = new List<Color>();
 
     public List<Pawn> currentlySelectedPawns = new List<Pawn>(); //this just makes the most sense since sometimes more than one pawn would be required
+    public GameObject DrawButton;
 
+    public TextMeshProUGUI whosTurn;
     public void Start()
     {
         Physics2D.queriesHitTriggers = true;
@@ -45,7 +48,7 @@ public class TurnManager : MonoBehaviour
 
 
         players.Add(new Player(colors[0]));
-
+        players.Add(new Player(colors[1]));
 
         foreach(var player in players)
         {
@@ -54,7 +57,7 @@ public class TurnManager : MonoBehaviour
                 var piece = Instantiate(pawnPrefab);
                 var pawn = piece.GetComponent<Pawn>();
 
-                
+                pawn.GetComponent<SpriteRenderer>().color = actualColors[colors.IndexOf(pawn.color)];
                 pawn.color = player.color;
                 getStartTile[player.color].ApplyEffect(pawn);
   
@@ -72,23 +75,28 @@ public class TurnManager : MonoBehaviour
     {
         currentCard = deck.drawCard();
         cardDisplay.UpdateText(currentCard.cardDescription, currentCard.cardImage);
+        DrawButton.SetActive(false);
         cardDisplay.gameObject.SetActive(true);
         StartCoroutine(waitUntil());
 
     }
-
+    
 
     
     public void NextTurn()
     {
-        if (currentPlayer + 1 >= players.Count)
+        if (!currentCard.GoAgain)
         {
-            currentPlayer = 0;
+            if (currentPlayer + 1 >= players.Count)
+            {
+                currentPlayer = 0;
+            }
+            else
+            {
+                currentPlayer++;
+            }
         }
-        else
-        {
-            currentPlayer++;
-        }
+        DrawButton.SetActive(true);
 
     }
 
@@ -103,6 +111,7 @@ public class TurnManager : MonoBehaviour
         if (!selectablePawns(currentCard.neededPawns[0]))
         {
             NextTurn();
+            
         }
     }
 
@@ -161,12 +170,13 @@ public class TurnManager : MonoBehaviour
         deselectPawns();
         if (currentlySelectedPawns.Count >= currentCard.neededPawns.Length)
         {
-            if(currentCard.CardEffect(currentlySelectedPawns))
+            if(currentCard.CardEffect(currentlySelectedPawns) )
             {
                 NextTurn();
             }
             //probably go next turn if successful (?)
             currentlySelectedPawns.Clear();
+            
         }
         else
         {
