@@ -104,4 +104,4 @@ MonoBehaviour:
   nextTile: {fileID: 0}
   prevTile: {fileID: 0}
   AltTile: {fileID: 0}
-  ColorOrNot: 0
+  ColorOrNot: 1

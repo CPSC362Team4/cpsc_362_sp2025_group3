@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 using TMPro;
+using UnityEngine.Events;
 
 public class TurnManager : MonoBehaviour
 {
@@ -35,11 +36,18 @@ public class TurnManager : MonoBehaviour
     public List<Pawn> currentlySelectedPawns = new List<Pawn>(); //this just makes the most sense since sometimes more than one pawn would be required
     public GameObject DrawButton;
 
-    public TextMeshProUGUI whosTurn;
+    public UnityEvent OnNextTurn;
+
+    private void Awake()
+    {
+        OnNextTurn = new UnityEvent();
+        if (Singleton == null) { Singleton = this; }
+    }
     public void Start()
     {
+        
         Physics2D.queriesHitTriggers = true;
-        if(Singleton == null) { Singleton = this; }
+        
 
         foreach(var tile in startTiles)
         {
@@ -57,8 +65,9 @@ public class TurnManager : MonoBehaviour
                 var piece = Instantiate(pawnPrefab);
                 var pawn = piece.GetComponent<Pawn>();
 
-                pawn.GetComponent<SpriteRenderer>().color = actualColors[colors.IndexOf(pawn.color)];
                 pawn.color = player.color;
+                pawn.GetComponent<SpriteRenderer>().color = actualColors[colors.IndexOf(pawn.color)];
+                
                 getStartTile[player.color].ApplyEffect(pawn);
   
                 player.pieces.Add(pawn);
@@ -97,6 +106,7 @@ public class TurnManager : MonoBehaviour
             }
         }
         DrawButton.SetActive(true);
+        OnNextTurn.Invoke();
 
     }
 
@@ -123,7 +133,7 @@ public class TurnManager : MonoBehaviour
             foreach (var piece in getCurrentPlayer().pieces)
             {
 
-                if (makeSelectable.state.Contains(piece.state))
+                if (makeSelectable.state.Contains(piece.state) && currentCard.CanMove(piece))
                 {
 
                     piece.selectable = true;
