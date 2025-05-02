@@ -31,4 +31,25 @@ public class Card : BaseCard
         finalTile.LandedOnEffect(pieceToEffect[0]);
         return true;
     }
+    public override bool CanMove(Pawn pawn)
+    {
+        BaseTile startTile = pawn.currentTile;
+        BaseTile finalTile = startTile;
+        for (int i = 0; i < value; i++)
+        {
+            Debug.Log(" i tried to move");
+            finalTile = pawn.currentTile.nextTile;
+
+            if (!finalTile.ApplyEffect(pawn)) //basically means move was illegal
+            {
+
+                startTile.ApplyEffect(pawn);
+                return false;
+            }
+
+
+        }
+        startTile.ApplyEffect(pawn);
+        return true;
+    }
 }
