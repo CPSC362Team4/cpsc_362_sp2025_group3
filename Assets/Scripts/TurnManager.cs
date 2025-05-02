@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System.Linq;
-using TMPro;
-using UnityEngine.Events;
 
 public class TurnManager : MonoBehaviour
 {
@@ -34,20 +32,11 @@ public class TurnManager : MonoBehaviour
     public List<Color> actualColors = new List<Color>();
 
     public List<Pawn> currentlySelectedPawns = new List<Pawn>(); //this just makes the most sense since sometimes more than one pawn would be required
-    public GameObject DrawButton;
 
-    public UnityEvent OnNextTurn;
-
-    private void Awake()
-    {
-        OnNextTurn = new UnityEvent();
-        if (Singleton == null) { Singleton = this; }
-    }
     public void Start()
     {
-        
         Physics2D.queriesHitTriggers = true;
-        
+        if(Singleton == null) { Singleton = this; }
 
         foreach(var tile in startTiles)
         {
@@ -56,7 +45,7 @@ public class TurnManager : MonoBehaviour
 
 
         players.Add(new Player(colors[0]));
-        players.Add(new Player(colors[1]));
+
 
         foreach(var player in players)
         {
@@ -65,9 +54,8 @@ public class TurnManager : MonoBehaviour
                 var piece = Instantiate(pawnPrefab);
                 var pawn = piece.GetComponent<Pawn>();
 
-                pawn.color = player.color;
-                pawn.GetComponent<SpriteRenderer>().color = actualColors[colors.IndexOf(pawn.color)];
                 
+                pawn.color = player.color;
                 getStartTile[player.color].ApplyEffect(pawn);
   
                 player.pieces.Add(pawn);
@@ -84,29 +72,23 @@ public class TurnManager : MonoBehaviour
     {
         currentCard = deck.drawCard();
         cardDisplay.UpdateText(currentCard.cardDescription, currentCard.cardImage);
-        DrawButton.SetActive(false);
         cardDisplay.gameObject.SetActive(true);
         StartCoroutine(waitUntil());
 
     }
-    
+
 
     
     public void NextTurn()
     {
-        if (!currentCard.GoAgain)
+        if (currentPlayer + 1 >= players.Count)
         {
-            if (currentPlayer + 1 >= players.Count)
-            {
-                currentPlayer = 0;
-            }
-            else
-            {
-                currentPlayer++;
-            }
+            currentPlayer = 0;
         }
-        DrawButton.SetActive(true);
-        OnNextTurn.Invoke();
+        else
+        {
+            currentPlayer++;
+        }
 
     }
 
@@ -121,7 +103,6 @@ public class TurnManager : MonoBehaviour
         if (!selectablePawns(currentCard.neededPawns[0]))
         {
             NextTurn();
-            
         }
     }
 
@@ -133,7 +114,7 @@ public class TurnManager : MonoBehaviour
             foreach (var piece in getCurrentPlayer().pieces)
             {
 
-                if (makeSelectable.state.Contains(piece.state) && currentCard.CanMove(piece))
+                if (makeSelectable.state.Contains(piece.state))
                 {
 
                     piece.selectable = true;
@@ -180,13 +161,12 @@ public class TurnManager : MonoBehaviour
         deselectPawns();
         if (currentlySelectedPawns.Count >= currentCard.neededPawns.Length)
         {
-            if(currentCard.CardEffect(currentlySelectedPawns) )
+            if(currentCard.CardEffect(currentlySelectedPawns))
             {
                 NextTurn();
             }
             //probably go next turn if successful (?)
             currentlySelectedPawns.Clear();
-            
         }
         else
         {
