@@ -18,6 +18,7 @@ public class TurnManager : MonoBehaviour
     
 
     public int piecesPerPlayer; //not necessary but i thought might be cool
+    public int totalPlayers = 0;
     public GameObject pawnPrefab;
     
 
@@ -26,7 +27,7 @@ public class TurnManager : MonoBehaviour
 
 
     public int currentPlayer = 0;
-    private BaseCard currentCard;
+    public BaseCard currentCard;
 
     public static TurnManager Singleton; //singleton pattern bc i really can't/don't want to think of way for other things to perform their actions
 
@@ -42,23 +43,27 @@ public class TurnManager : MonoBehaviour
     {
         OnNextTurn = new UnityEvent();
         if (Singleton == null) { Singleton = this; }
+        
     }
-    public void Start()
+   
+    public void AddPlayer()
     {
-        
-        Physics2D.queriesHitTriggers = true;
-        
+        players.Add(new Player(colors[totalPlayers]));
 
-        foreach(var tile in startTiles)
+        totalPlayers++;
+    }
+    public void StartGame()
+    {
+        OnNextTurn.AddListener(NextTurn);
+        Physics2D.queriesHitTriggers = true;
+
+
+        foreach (var tile in startTiles)
         {
             getStartTile.Add(tile.color, tile);
         }
 
-
-        players.Add(new Player(colors[0]));
-        players.Add(new Player(colors[1]));
-
-        foreach(var player in players)
+        foreach (var player in players)
         {
             for (int i = 0; i < piecesPerPlayer; i++)
             {
@@ -67,26 +72,23 @@ public class TurnManager : MonoBehaviour
 
                 pawn.color = player.color;
                 pawn.GetComponent<SpriteRenderer>().color = actualColors[colors.IndexOf(pawn.color)];
-                
+                Debug.Log(getStartTile.Count);
                 getStartTile[player.color].ApplyEffect(pawn);
-  
+
                 player.pieces.Add(pawn);
             }
         }
         //You would think we have to initialize the deck but since it was system serialized we dont have to since its initialized at compile time
 
-        deck.fillDeck();//This is just for now since when networking comes in i'll have to sync everyones deck (OR EVERYONE CAN REQUEST THE SERVER FOR A CARD)
-        
+        //This is just for now since when networking comes in i'll have to sync everyones deck (OR EVERYONE CAN REQUEST THE SERVER FOR A CARD)
+
     }
-
-
     public void DrawCard()
     {
         currentCard = deck.drawCard();
-        cardDisplay.UpdateText(currentCard.cardDescription, currentCard.cardImage);
+        cardDisplay.UpdateText();
         DrawButton.SetActive(false);
-        cardDisplay.gameObject.SetActive(true);
-        StartCoroutine(waitUntil());
+        
 
     }
     
@@ -106,12 +108,17 @@ public class TurnManager : MonoBehaviour
             }
         }
         DrawButton.SetActive(true);
-        OnNextTurn.Invoke();
+        
 
     }
 
+    public void DisplayCard()
+    {
+        StartCoroutine(waitUntil());
+    }
     private IEnumerator waitUntil()
     {
+        cardDisplay.gameObject.SetActive(true);
         while (cardDisplay.gameObject.activeSelf)
         {
 
@@ -120,8 +127,8 @@ public class TurnManager : MonoBehaviour
 
         if (!selectablePawns(currentCard.neededPawns[0]))
         {
-            NextTurn();
-            
+            PlayerSync.Singleton.AllNextTurnRpc();
+
         }
     }
 
@@ -176,26 +183,30 @@ public class TurnManager : MonoBehaviour
     }
     public void SelectedPiece(Pawn selectedPawn)
     {
-        currentlySelectedPawns.Add(selectedPawn);
-        deselectPawns();
-        if (currentlySelectedPawns.Count >= currentCard.neededPawns.Length)
-        {
-            if(currentCard.CardEffect(currentlySelectedPawns) )
-            {
-                NextTurn();
-            }
-            //probably go next turn if successful (?)
-            currentlySelectedPawns.Clear();
-            
-        }
-        else
-        {
-            selectablePawns(currentCard.neededPawns[currentlySelectedPawns.Count]);
-        }
+        PlayerSync.Singleton.SelectPieceRpc(whoPiece(selectedPawn));
+        deselectPawns();  
         
     }
     public Player getCurrentPlayer()
     {
         return players[currentPlayer];
+    }
+
+    private int[] whoPiece(Pawn pawn)
+    {
+        int[] info = new int[2] {-1,-1}; //-1 just incase it somehow doesn't find it which should be impossible
+        for (int i = 0; i < players.Count; i++)
+        {
+            for (int j = 0; j < players[i].pieces.Count; j++)
+            {
+               if (players[i].pieces[j] == pawn)
+                {
+                    info[0] = i;
+                    info[1] = j; 
+                    break;
+                }
+            }
+        }
+        return info;
     }
 }

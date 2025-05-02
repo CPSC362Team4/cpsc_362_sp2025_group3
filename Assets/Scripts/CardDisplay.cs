@@ -9,13 +9,13 @@ public class CardDisplay : MonoBehaviour
     public Image[] cardNumber;
     
 
-    public void UpdateText(string text, Sprite cardImage)
+    public void UpdateText()
     {
-        cardText.text = text;
+        cardText.text = TurnManager.Singleton.currentCard.cardDescription;
 
         foreach(var card in cardNumber)
         {
-            card.sprite = cardImage;
+            card.sprite = TurnManager.Singleton.currentCard.cardImage;
         }
         
     }

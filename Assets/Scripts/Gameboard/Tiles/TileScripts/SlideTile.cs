@@ -8,7 +8,7 @@ public class SlideTile : StandardTile
     {
         if (piece.color != color)
         {
-            piece.currentTile = targetTile;
+            targetTile.ApplyEffect(piece);
         }
     }
 }

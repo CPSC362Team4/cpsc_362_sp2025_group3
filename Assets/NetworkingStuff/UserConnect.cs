@@ -46,7 +46,7 @@ public class UserConnect : MonoBehaviour
     {
         try
         {
-
+            Debug.Log("Im creating host");
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(3);
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
@@ -72,6 +72,7 @@ public class UserConnect : MonoBehaviour
     {
         try
         {
+            Debug.Log("Im joining host");
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
 

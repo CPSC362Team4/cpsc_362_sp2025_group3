@@ -15,19 +15,20 @@ public class Card : BaseCard
         BaseTile finalTile = startTile;
         for (int i = 0; i < value; i++) 
         {
-            Debug.Log(" i tried to move");
+            
             finalTile = pieceToEffect[0].currentTile.nextTile;
             
-            if (!finalTile.ApplyEffect(pieceToEffect[0])) //basically means move was illegal
+            if (finalTile == null || !finalTile.ApplyEffect(pieceToEffect[0])) //basically means move was illegal
             {
-
+                Debug.Log("move fail");
                 startTile.ApplyEffect(pieceToEffect[0]);
                 return false;
             }
             
             
         }
-        
+
+        Debug.Log("move success");
         finalTile.LandedOnEffect(pieceToEffect[0]);
         return true;
     }
@@ -37,10 +38,10 @@ public class Card : BaseCard
         BaseTile finalTile = startTile;
         for (int i = 0; i < value; i++)
         {
-            Debug.Log(" i tried to move");
+           
             finalTile = pawn.currentTile.nextTile;
 
-            if (!finalTile.ApplyEffect(pawn)) //basically means move was illegal
+            if (finalTile == null || !finalTile.ApplyEffect(pawn)) //basically means move was illegal
             {
 
                 startTile.ApplyEffect(pawn);
@@ -49,6 +50,7 @@ public class Card : BaseCard
 
 
         }
+        Debug.Log("I can move");
         startTile.ApplyEffect(pawn);
         return true;
     }

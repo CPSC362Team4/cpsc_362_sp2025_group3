@@ -13,9 +13,9 @@ public class StandardTile : BaseTile
             {
                 return false;
             }
-            piecesOnTile[0].currentTile = TurnManager.Singleton.getStartTile[color];
-            TurnManager.Singleton.getStartTile[color].ApplyEffect(piecesOnTile[0]);
-            piecesOnTile.RemoveAt(0);
+            piecesOnTile[0].currentTile = TurnManager.Singleton.getStartTile[piece.color];
+            TurnManager.Singleton.getStartTile[piece.color].ApplyEffect(piecesOnTile[0]);
+            
 
         }
         piece.state = PieceState.Active;

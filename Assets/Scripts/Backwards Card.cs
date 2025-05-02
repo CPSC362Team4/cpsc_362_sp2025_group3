@@ -11,7 +11,7 @@ public class BackwardsCard : BaseCard
         BaseTile finalTile = startTile;
         for (int i = 0; i < value; i++)
         {
-            Debug.Log(" i tried to move");
+            
             finalTile = pieceToEffect[0].currentTile.prevTile;
 
             if (!finalTile.ApplyEffect(pieceToEffect[0])) //basically means move was illegal

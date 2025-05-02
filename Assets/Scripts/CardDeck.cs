@@ -26,7 +26,11 @@ public class CardDeck //since turn manager will be our mono behavior no need to 
         foreach(BaseCard card in deck)
             Debug.Log(card.cardDescription);
     }*/
-
+    
+    public void AddCard(int id)
+    {
+        deck.Add(CardData.GetCards[id]);
+    }
     public void fillDeck()
     {
         for(int i = 0; i < 5; i++)

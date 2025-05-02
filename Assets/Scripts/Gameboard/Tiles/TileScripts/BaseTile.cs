@@ -13,7 +13,7 @@ public abstract class BaseTile : MonoBehaviour
 
 
 
-    protected List<Pawn> piecesOnTile = new List<Pawn>();  // stores pieces on this tile (though the list functionality only matters for home tiles)
+    public List<Pawn> piecesOnTile = new List<Pawn>();  // stores pieces on this tile (though the list functionality only matters for home tiles)
     
     //im just gonna keep this out since this and apply effect share the exact same function anyways
     /*public virtual void AddPiece(Pawn piece) 
@@ -39,10 +39,12 @@ public abstract class BaseTile : MonoBehaviour
     {
         if(piece.currentTile != null)
         {
+            
             piece.currentTile.RemovePiece();
         }
         piece.currentTile = this;
         piecesOnTile.Add(piece);
+        Debug.Log("Who am I added to " + name);
         if (piecesOnTile.Count > 1 )
         {
             for (int i = 0; i < piecesOnTile.Count; i++) // for handling multiple pieces on a tile ex: home/start tiles
