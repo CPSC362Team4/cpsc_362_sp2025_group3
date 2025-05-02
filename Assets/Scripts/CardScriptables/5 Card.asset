@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: 5 Card
   m_EditorClassIdentifier: 
   CanMoveSpawn: 1
+  GoAgain: 0
   cardDescription: Move Forward 5 Spaces
   cardImage: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
   neededPawns:
   - myPawns: 1
-    state: 0100000000000000
+    state: 00000000
   value: 5

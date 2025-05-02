@@ -12,7 +12,7 @@ public class Pawn : MonoBehaviour
 
     private void Awake()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = TurnManager.Singleton.actualColors[TurnManager.Singleton.colors.IndexOf(color)];
+        
     }
     void Update()
     {

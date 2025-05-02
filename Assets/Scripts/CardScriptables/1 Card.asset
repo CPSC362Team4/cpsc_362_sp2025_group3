@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: 1 Card
   m_EditorClassIdentifier: 
   CanMoveSpawn: 0
-  cardDescription: 
-  cardImage: {fileID: 0}
-  neededPawns: []
-  value: 0
+  GoAgain: 0
+  cardDescription: Move any pawn one space forward, Including Pawns at home
+  cardImage: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  neededPawns:
+  - myPawns: 1
+    state: 0100000000000000
+  value: 1

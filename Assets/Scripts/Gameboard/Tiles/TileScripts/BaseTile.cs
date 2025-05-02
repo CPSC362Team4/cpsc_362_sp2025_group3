@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // abstract base class for all tiles
@@ -42,7 +43,19 @@ public abstract class BaseTile : MonoBehaviour
         }
         piece.currentTile = this;
         piecesOnTile.Add(piece);
-        piece.gameObject.transform.position = gameObject.transform.position;
+        if (piecesOnTile.Count > 1 )
+        {
+            for (int i = 0; i < piecesOnTile.Count; i++) // for handling multiple pieces on a tile ex: home/start tiles
+            {
+                piecesOnTile[i].transform.position = new Vector3(transform.position.x - 0.5f + (1 * (i % 2)), transform.position.y + 0.5f + (-1 * (i / 2))); //hardcoded but i cant be bothered rn 
+            }
+        }
+        else
+        {
+            
+            piece.gameObject.transform.position = gameObject.transform.position;
+        }
+        
         return true;
     } 
 
