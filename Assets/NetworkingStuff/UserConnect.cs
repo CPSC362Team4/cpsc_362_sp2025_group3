@@ -21,8 +21,10 @@ public class UserConnect : MonoBehaviour
 
     [SerializeField] private Button relayButton;
     [SerializeField] private TMP_Text joinCodeText;
+    [SerializeField] private GameObject connectedStatus;
     [SerializeField] private TMP_InputField joinCodeInput;
-
+    
+    
     private async void Start()
     {
         joinCodeInput.onEndEdit.AddListener(JoinRelay);
@@ -51,7 +53,7 @@ public class UserConnect : MonoBehaviour
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             joinCodeText.text = joinCode;
-
+            joinCodeText.gameObject.SetActive(true);
 
             RelayServerData relayServerData = AllocationUtils.ToRelayServerData(allocation, "dtls");
 
@@ -82,6 +84,8 @@ public class UserConnect : MonoBehaviour
             NetworkManager.Singleton.StartClient();
             //editor.SetActive(true);
             joinCodeInput.gameObject.SetActive(false);
+            connectedStatus.SetActive(true);
+            
         }
         catch (RelayServiceException e)
         {
