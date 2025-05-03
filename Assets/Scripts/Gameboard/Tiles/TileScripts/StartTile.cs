@@ -9,4 +9,9 @@ public class StartTile : BaseTile
         piece.state = PieceState.Start;
         return base.ApplyEffect(piece);
     }
+
+    public override void LandedOnEffect(Pawn piece)
+    {
+
+    }
 }

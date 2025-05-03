@@ -44,7 +44,7 @@ public abstract class BaseTile : MonoBehaviour
         }
         piece.currentTile = this;
         piecesOnTile.Add(piece);
-        Debug.Log("Who am I added to " + name);
+        
         if (piecesOnTile.Count > 1 )
         {
             for (int i = 0; i < piecesOnTile.Count; i++) // for handling multiple pieces on a tile ex: home/start tiles
@@ -63,6 +63,16 @@ public abstract class BaseTile : MonoBehaviour
 
     public virtual void LandedOnEffect(Pawn piece)
     {
-       
+        if (piecesOnTile.Count > 1)
+        {
+            if (piecesOnTile[0].color == piece.color)
+            {
+               
+            }
+            piecesOnTile[0].currentTile = TurnManager.Singleton.getStartTile[piece.color];
+            TurnManager.Singleton.getStartTile[piece.color].ApplyEffect(piecesOnTile[0]);
+
+
+        }
     }
 }

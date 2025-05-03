@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74a18fed8009fc744bf35f05e4a4d788, type: 3}
-  m_Name: 8 Card
+  m_Script: {fileID: 11500000, guid: d7e823bea28401e47814649aa680d22a, type: 3}
+  m_Name: SORRY!
   m_EditorClassIdentifier: 
   CanMoveSpawn: 0
   GoAgain: 0
-  cardDescription: Move 8 Spaces, Not including pawns at start
-  cardImage: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  cardDescription: SORRY! Select your pawn, then select an enemies pawn and take
+    their spot and send them back to start
+  cardImage: {fileID: 21300000, guid: 01f913aa790415541b7592602a7700ce, type: 3}
   neededPawns:
   - myPawns: 1
-    state: 0000000003000000
-  value: 8
+    state: 01000000
+  - myPawns: 0
+    state: 00000000

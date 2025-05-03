@@ -74,7 +74,7 @@ public class PlayerSync : NetworkBehaviour
         cache.currentlySelectedPawns.Add(cache.players[pieceInfo[0]].pieces[pieceInfo[1]]);
         if (cache.currentlySelectedPawns.Count >= cache.currentCard.neededPawns.Length)
         {
-            Debug.Log("Im selected " + cache.currentlySelectedPawns[0].name);
+            
             cache.currentCard.CardEffect(cache.currentlySelectedPawns);
 
             cache.currentlySelectedPawns.Clear();
@@ -84,8 +84,13 @@ public class PlayerSync : NetworkBehaviour
         }
         else if (IsValid(TurnManager.Singleton.currentPlayer, NetworkManager.Singleton.LocalClientId))
         {
-            cache.selectablePawns(cache.currentCard.neededPawns[cache.currentlySelectedPawns.Count]);
+            
+            if(!cache.selectablePawns(cache.currentCard.neededPawns[cache.currentlySelectedPawns.Count]))
+            {
+                AllNextTurnRpc();
+            }
         }
+        
     }
 
     private bool IsValid(int id, ulong id2)

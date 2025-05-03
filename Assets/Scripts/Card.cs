@@ -20,7 +20,7 @@ public class Card : BaseCard
             
             if (finalTile == null || !finalTile.ApplyEffect(pieceToEffect[0])) //basically means move was illegal
             {
-                Debug.Log("move fail");
+                
                 startTile.ApplyEffect(pieceToEffect[0]);
                 return false;
             }
@@ -28,7 +28,7 @@ public class Card : BaseCard
             
         }
 
-        Debug.Log("move success");
+        
         finalTile.LandedOnEffect(pieceToEffect[0]);
         return true;
     }
@@ -43,15 +43,19 @@ public class Card : BaseCard
 
             if (finalTile == null || !finalTile.ApplyEffect(pawn)) //basically means move was illegal
             {
-
+                Debug.Log("I can't move " + pawn.name);
                 startTile.ApplyEffect(pawn);
                 return false;
             }
 
 
         }
-        Debug.Log("I can move");
+        
+        
         startTile.ApplyEffect(pawn);
+        Debug.Log("is anyone here? " + finalTile.piecesOnTile.Count);
+        if (finalTile.piecesOnTile.Count > 0 && finalTile.piecesOnTile[0].color == pawn.color) { return false; }
+        Debug.Log("I can move " + pawn.color);
         return true;
     }
 }

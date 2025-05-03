@@ -160,9 +160,10 @@ public class TurnManager : MonoBehaviour
 
             foreach (var piece in player.pieces)
             {
-
+                
                 if (makeSelectable.state.Contains(piece.state))
                 {
+                    
                     piece.selectable = true;
                     something = true;
                 }
@@ -183,6 +184,7 @@ public class TurnManager : MonoBehaviour
     }
     public void SelectedPiece(Pawn selectedPawn)
     {
+        Debug.Log("im bEING CLICKED HELP");
         PlayerSync.Singleton.SelectPieceRpc(whoPiece(selectedPawn));
         deselectPawns();  
         
