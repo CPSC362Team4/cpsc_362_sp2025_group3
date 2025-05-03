@@ -5,5 +5,5 @@ Project description: We will make a plotform so we can play the company’s bigg
 We'll be using a linter called super-linter which is a linter that can be configured to lint the majority of languages and files types like Markdown and json, which in our case we'll mainly be focused on linting c# files. 
 
 
-link to dropbox with game :[[Link To Game]([https://drive.google.com/file/d/1uw9rNp-ylQ1N7bCzyvBa4kVsGRIX2wIZ/view?usp=drive_link])
+link to dropbox with game :[[Link To Game](https://drive.google.com/file/d/1t2-iBn-UZe6Mk0tZeSs1d1HzQqfEDdb0/view?usp=sharing)
 ![alt text](https://drive.google.com/uc?export=view&id=1geyyGNgzYpOUSp3fo68P2Yj4IjuHO5x9)
